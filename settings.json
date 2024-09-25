@@ -1,0 +1,37 @@
+{
+    "DebugEnabled": false,
+    "ScoreType": 0,
+    "CameraMode": 2,
+    "Bloom": 0,
+    "CursorTrail": false,
+    "DriftEnabled": true,
+    "GridVisible": false,
+    "ConstantAR": true,
+    "Offset": 0.02800000086426735,
+    "Sensitivity": 1.2999999523162842,
+    "ApproachDistance": 32.0,
+    "ApproachTime": 0.375,
+    "HitEnabled": true,
+    "MissEnabled": false,
+    "ParticlesEnabled": false,
+    "CursorColor": {
+        "R": 255,
+        "G": 255,
+        "B": 255,
+        "A": 255
+    },
+    "NoteColors": [
+        {
+            "R": 255,
+            "G": 204,
+            "B": 255,
+            "A": 255
+        },
+        {
+            "R": 153,
+            "G": 255,
+            "B": 255,
+            "A": 255
+        }
+    ]
+}
