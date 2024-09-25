@@ -1,0 +1,1114 @@
+[gd_scene load_steps=52 format=2]
+
+[ext_resource path="res://assets/fonts/SourceSansPro/SourceSansPro-Semibold.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/images/play.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/account.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/settings.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/matt.jpg" type="Texture" id=5]
+[ext_resource path="res://assets/themes/Menu.tres" type="Theme" id=6]
+[ext_resource path="res://assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://scripts/menu/MainMenu.cs" type="Script" id=8]
+[ext_resource path="res://assets/images/vulnus.png" type="Texture" id=9]
+[ext_resource path="res://scripts/menu/MenuHandler.cs" type="Script" id=10]
+[ext_resource path="res://scripts/menu/Singleplayer.cs" type="Script" id=11]
+[ext_resource path="res://prefabs/menu/MapList.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scripts/menu/components/maps/MapDetails.cs" type="Script" id=13]
+[ext_resource path="res://scripts/menu/components/Backgrounds.cs" type="Script" id=14]
+[ext_resource path="res://scripts/menu/Results.cs" type="Script" id=15]
+[ext_resource path="res://assets/images/loading.png" type="Texture" id=16]
+[ext_resource path="res://assets/shaders/mask.gdshader" type="Shader" id=17]
+[ext_resource path="res://assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf" type="DynamicFontData" id=18]
+
+[sub_resource type="StyleBoxFlat" id=25]
+bg_color = Color( 0.141176, 0.141176, 0.141176, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="ShaderMaterial" id=26]
+shader = ExtResource( 17 )
+
+[sub_resource type="StyleBoxFlat" id=27]
+bg_color = Color( 0.14902, 0.14902, 0.14902, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id=28]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id=29]
+bg_color = Color( 0.141176, 0.141176, 0.141176, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.0627451, 0.0627451, 0.0627451, 0.501961 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="Gradient" id=15]
+interpolation_mode = 2
+offsets = PoolRealArray( 0.65, 1 )
+colors = PoolColorArray( 0.141176, 0.141176, 0.141176, 0.784314, 0.141176, 0.141176, 0.141176, 0 )
+
+[sub_resource type="GradientTexture" id=16]
+gradient = SubResource( 15 )
+width = 256
+
+[sub_resource type="StyleBoxFlat" id=17]
+bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="Gradient" id=18]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.1, 0.9, 1 )
+colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=13]
+gradient = SubResource( 18 )
+width = 256
+
+[sub_resource type="ShaderMaterial" id=19]
+shader = ExtResource( 17 )
+shader_param/mask_texture = SubResource( 13 )
+
+[sub_resource type="DynamicFont" id=20]
+size = 22
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=21]
+size = 18
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=22]
+use_filter = true
+font_data = ExtResource( 18 )
+
+[sub_resource type="DynamicFont" id=23]
+size = 18
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=30]
+size = 24
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=31]
+size = 36
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=32]
+size = 48
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=33]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=36]
+size = 24
+use_filter = true
+font_data = ExtResource( 18 )
+
+[sub_resource type="DynamicFont" id=37]
+size = 18
+font_data = ExtResource( 18 )
+
+[sub_resource type="StyleBoxFlat" id=34]
+bg_color = Color( 0.164706, 0.164706, 0.164706, 1 )
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+
+[sub_resource type="DynamicFont" id=35]
+size = 24
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=38]
+size = 24
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 64
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 32
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 22
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 32
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 24
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 20
+use_filter = true
+font_data = ExtResource( 7 )
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 6 )
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_vertical_guides_": [ -88.0 ]
+}
+
+[node name="Background" type="Control" parent="."]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 14 )
+
+[node name="Texture" type="TextureRect" parent="Background"]
+modulate = Color( 1, 1, 1, 0.784314 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 7
+
+[node name="Overlay" type="ColorRect" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.784314, 0.784314, 0.784314, 0.0941176 )
+
+[node name="ViewContainer" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 72.0
+
+[node name="MainMenu" type="Control" parent="ViewContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 8 )
+
+[node name="LockedAwayForever" type="AspectRatioContainer" parent="ViewContainer/MainMenu"]
+visible = false
+anchor_left = 0.35
+anchor_right = 0.65
+anchor_bottom = 1.0
+margin_left = -32.0
+margin_right = 32.0
+ratio = 1.25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewContainer/MainMenu/LockedAwayForever"]
+margin_top = 196.4
+margin_right = 544.0
+margin_bottom = 631.6
+custom_constants/separation = 8
+
+[node name="Play" type="Button" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer"]
+margin_right = 330.0
+margin_bottom = 358.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+custom_constants/hseparation = 8
+custom_styles/hover = SubResource( 25 )
+custom_styles/pressed = SubResource( 25 )
+custom_styles/focus = SubResource( 25 )
+custom_styles/disabled = SubResource( 25 )
+custom_styles/normal = SubResource( 25 )
+
+[node name="Cover" type="TextureRect" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer/Play"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 0.282353 )
+material = SubResource( 26 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 2.0
+margin_right = -26.0
+margin_bottom = -2.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 7
+
+[node name="Image" type="TextureRect" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer/Play"]
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 0.65
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer"]
+margin_left = 338.0
+margin_right = 448.0
+margin_bottom = 358.0
+size_flags_horizontal = 3
+custom_constants/separation = 4
+alignment = 1
+
+[node name="Settings" type="Button" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer/VBoxContainer"]
+margin_right = 110.0
+margin_bottom = 177.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/hseparation = 8
+custom_styles/hover = SubResource( 25 )
+custom_styles/pressed = SubResource( 25 )
+custom_styles/focus = SubResource( 25 )
+custom_styles/disabled = SubResource( 25 )
+custom_styles/normal = SubResource( 25 )
+
+[node name="Image" type="TextureRect" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer/VBoxContainer/Settings"]
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 0.65
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Quit" type="Button" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer/VBoxContainer"]
+margin_top = 181.0
+margin_right = 110.0
+margin_bottom = 358.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/hseparation = 8
+custom_styles/hover = SubResource( 25 )
+custom_styles/pressed = SubResource( 25 )
+custom_styles/focus = SubResource( 25 )
+custom_styles/disabled = SubResource( 25 )
+custom_styles/normal = SubResource( 25 )
+
+[node name="Image" type="TextureRect" parent="ViewContainer/MainMenu/LockedAwayForever/HBoxContainer/VBoxContainer/Quit"]
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 0.65
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+
+[node name="Sidebar" type="Control" parent="ViewContainer/MainMenu"]
+anchor_right = 0.3
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_right = 16.0
+
+[node name="Buttons" type="VBoxContainer" parent="ViewContainer/MainMenu/Sidebar"]
+anchor_top = 0.4
+anchor_bottom = 1.0
+margin_right = 352.0
+custom_constants/separation = 4
+
+[node name="SignIn" type="Button" parent="ViewContainer/MainMenu/Sidebar/Buttons"]
+visible = false
+margin_right = 352.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 48 )
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 27 )
+custom_styles/pressed = SubResource( 28 )
+custom_styles/focus = SubResource( 29 )
+custom_styles/disabled = SubResource( 29 )
+custom_styles/normal = SubResource( 29 )
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/MainMenu/Sidebar/Buttons/SignIn"]
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = -8.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ViewContainer/MainMenu/Sidebar/Buttons/SignIn"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 56.0
+custom_fonts/font = SubResource( 1 )
+text = "Sign In"
+valign = 1
+
+[node name="Singleplayer" type="Button" parent="ViewContainer/MainMenu/Sidebar/Buttons"]
+margin_right = 352.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 0, 48 )
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 27 )
+custom_styles/pressed = SubResource( 28 )
+custom_styles/focus = SubResource( 29 )
+custom_styles/disabled = SubResource( 29 )
+custom_styles/normal = SubResource( 29 )
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/MainMenu/Sidebar/Buttons/Singleplayer"]
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = -8.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ViewContainer/MainMenu/Sidebar/Buttons/Singleplayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 56.0
+custom_fonts/font = SubResource( 1 )
+text = "Singleplayer"
+valign = 1
+
+[node name="Downloads" type="Button" parent="ViewContainer/MainMenu/Sidebar/Buttons"]
+margin_top = 52.0
+margin_right = 352.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 48 )
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 27 )
+custom_styles/pressed = SubResource( 28 )
+custom_styles/focus = SubResource( 29 )
+custom_styles/disabled = SubResource( 29 )
+custom_styles/normal = SubResource( 29 )
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/MainMenu/Sidebar/Buttons/Downloads"]
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = -8.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ViewContainer/MainMenu/Sidebar/Buttons/Downloads"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 56.0
+custom_fonts/font = SubResource( 1 )
+text = "Download Maps"
+valign = 1
+
+[node name="Options" type="Button" parent="ViewContainer/MainMenu/Sidebar/Buttons"]
+margin_top = 104.0
+margin_right = 352.0
+margin_bottom = 152.0
+rect_min_size = Vector2( 0, 48 )
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 27 )
+custom_styles/pressed = SubResource( 28 )
+custom_styles/focus = SubResource( 29 )
+custom_styles/disabled = SubResource( 29 )
+custom_styles/normal = SubResource( 29 )
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/MainMenu/Sidebar/Buttons/Options"]
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = -8.0
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ViewContainer/MainMenu/Sidebar/Buttons/Options"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 56.0
+custom_fonts/font = SubResource( 1 )
+text = "Settings"
+valign = 1
+
+[node name="Quit" type="Button" parent="ViewContainer/MainMenu/Sidebar/Buttons"]
+margin_top = 156.0
+margin_right = 352.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 0, 48 )
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 27 )
+custom_styles/pressed = SubResource( 28 )
+custom_styles/focus = SubResource( 29 )
+custom_styles/disabled = SubResource( 29 )
+custom_styles/normal = SubResource( 29 )
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/MainMenu/Sidebar/Buttons/Quit"]
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = -8.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ViewContainer/MainMenu/Sidebar/Buttons/Quit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 56.0
+custom_fonts/font = SubResource( 1 )
+text = "Quit Vulnus"
+valign = 1
+
+[node name="News" type="Panel" parent="ViewContainer/MainMenu"]
+visible = false
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 64.0
+custom_styles/panel = SubResource( 12 )
+
+[node name="Singleplayer" type="Control" parent="ViewContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 11 )
+
+[node name="MapList" parent="ViewContainer/Singleplayer" instance=ExtResource( 12 )]
+anchor_left = 0.5
+margin_left = 0.0
+margin_bottom = -48.0
+
+[node name="BottomBar" type="ColorRect" parent="ViewContainer/Singleplayer"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -48.0
+color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[node name="Back" type="Button" parent="ViewContainer/Singleplayer/BottomBar"]
+anchor_bottom = 1.0
+margin_right = 192.0
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/BottomBar/Back"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 3 )
+text = "GO BACK"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MapDetails" type="TextureRect" parent="ViewContainer/Singleplayer"]
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_right = -64.0
+margin_bottom = -48.0
+texture = SubResource( 16 )
+expand = true
+script = ExtResource( 13 )
+
+[node name="MusicPreview" type="AudioStreamPlayer" parent="ViewContainer/Singleplayer/MapDetails"]
+bus = "Music"
+
+[node name="Loading" type="Control" parent="ViewContainer/Singleplayer/MapDetails"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Circle" type="TextureRect" parent="ViewContainer/Singleplayer/MapDetails/Loading"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -48.0
+margin_top = -48.0
+margin_right = 48.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 48, 48 )
+texture = ExtResource( 16 )
+expand = true
+flip_v = true
+
+[node name="Details" type="Control" parent="ViewContainer/Singleplayer/MapDetails"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="ViewContainer/Singleplayer/MapDetails/Details"]
+anchor_right = 1.0
+margin_left = 16.0
+margin_top = 40.0
+margin_right = -16.0
+margin_bottom = 248.0
+ratio = 6.0
+stretch_mode = 0
+alignment_vertical = 0
+
+[node name="Map" type="Panel" parent="ViewContainer/Singleplayer/MapDetails/Details/AspectRatioContainer"]
+margin_right = 704.0
+margin_bottom = 117.333
+rect_min_size = Vector2( 0, 72 )
+rect_pivot_offset = Vector2( 576, 0 )
+custom_styles/panel = SubResource( 17 )
+
+[node name="Cover" type="TextureRect" parent="ViewContainer/Singleplayer/MapDetails/Details/AspectRatioContainer/Map"]
+modulate = Color( 1, 1, 1, 0.627451 )
+material = SubResource( 19 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 2.0
+margin_right = -24.0
+margin_bottom = -2.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 7
+
+[node name="Title" type="Label" parent="ViewContainer/Singleplayer/MapDetails/Details/AspectRatioContainer/Map"]
+anchor_top = 0.05
+anchor_right = 1.0
+anchor_bottom = 0.8
+margin_left = 32.0
+margin_right = -32.0
+margin_bottom = 0.200005
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 20 )
+text = "The Name of the Song"
+valign = 1
+clip_text = true
+
+[node name="Artist" type="Label" parent="ViewContainer/Singleplayer/MapDetails/Details/AspectRatioContainer/Map/Title"]
+anchor_right = 1.0
+anchor_bottom = 0.4
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 21 )
+text = "The Artist"
+valign = 2
+
+[node name="Mapper" type="Label" parent="ViewContainer/Singleplayer/MapDetails/Details/AspectRatioContainer/Map/Title"]
+anchor_top = 0.6
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -0.600006
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 22 )
+text = "Mapper 1, Mapper 2"
+
+[node name="Difficulty" type="Label" parent="ViewContainer/Singleplayer/MapDetails/Details/AspectRatioContainer/Map"]
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_right = -96.0
+margin_bottom = -0.399994
+custom_fonts/font = SubResource( 23 )
+text = "Difficulty Name"
+
+[node name="Play" type="Button" parent="ViewContainer/Singleplayer/MapDetails/Details"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -204.0
+margin_top = -136.0
+margin_right = 52.0
+margin_bottom = -64.0
+custom_fonts/font = SubResource( 30 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewContainer/Singleplayer/MapDetails/Details/Play"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 12.0
+margin_right = -24.0
+margin_bottom = -12.0
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/Singleplayer/MapDetails/Details/Play/HBoxContainer"]
+margin_right = 58.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/MapDetails/Details/Play/HBoxContainer"]
+margin_left = 62.0
+margin_top = 1.0
+margin_right = 208.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 31 )
+text = "PLAY"
+align = 1
+valign = 1
+
+[node name="Mods" type="Button" parent="ViewContainer/Singleplayer/MapDetails/Details"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 58.0
+margin_top = -136.0
+margin_right = 130.0
+margin_bottom = -64.0
+custom_fonts/font = SubResource( 32 )
+text = "+"
+
+[node name="Icon" type="TextureRect" parent="ViewContainer/Singleplayer/MapDetails/Details/Mods"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 12.0
+margin_right = -12.0
+margin_bottom = -12.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="ModSelect" type="ColorRect" parent="ViewContainer/Singleplayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.784314 )
+
+[node name="ModPanel" type="Panel" parent="ViewContainer/Singleplayer/ModSelect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = -184.0
+margin_right = 320.0
+margin_bottom = 184.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ViewContainer/Singleplayer/ModSelect/ModPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 8.0
+margin_right = -16.0
+margin_bottom = -8.0
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer"]
+margin_right = 608.0
+margin_bottom = 43.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+custom_fonts/font = SubResource( 33 )
+text = "Mod Selection"
+align = 1
+valign = 1
+
+[node name="DiffInc" type="Control" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer"]
+margin_top = 47.0
+margin_right = 608.0
+margin_bottom = 133.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer/DiffInc"]
+anchor_right = 1.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 36 )
+text = "Difficulty Increase"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer/DiffInc"]
+anchor_right = 1.0
+margin_top = 32.0
+margin_bottom = 80.0
+
+[node name="DiffDec" type="Control" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer"]
+margin_top = 137.0
+margin_right = 608.0
+margin_bottom = 223.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer/DiffDec"]
+anchor_right = 1.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 36 )
+text = "Difficulty Decrease"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer/DiffDec"]
+anchor_right = 1.0
+margin_top = 32.0
+margin_bottom = 80.0
+
+[node name="Misc" type="Control" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer"]
+margin_top = 227.0
+margin_right = 608.0
+margin_bottom = 313.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer/Misc"]
+anchor_right = 1.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 36 )
+text = "Miscellaneous"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer/Misc"]
+anchor_right = 1.0
+margin_top = 32.0
+margin_bottom = 80.0
+
+[node name="SelectedMods" type="Label" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/VBoxContainer"]
+margin_top = 317.0
+margin_right = 608.0
+margin_bottom = 352.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.4
+custom_fonts/font = SubResource( 37 )
+text = "Selected: "
+valign = 1
+
+[node name="ConfigPanel" type="Panel" parent="ViewContainer/Singleplayer/ModSelect/ModPanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 48.0
+margin_right = 256.0
+margin_bottom = -48.0
+custom_styles/panel = SubResource( 34 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/ConfigPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="ViewContainer/Singleplayer/ModSelect/ModPanel/ConfigPanel/VBoxContainer"]
+margin_right = 256.0
+margin_bottom = 272.0
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 35 )
+text = "Configuration"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="ViewContainer/Singleplayer/ModSelect/ModPanel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_right = 128.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 38 )
+text = "SAVE"
+
+[node name="Tween" type="Tween" parent="ViewContainer/Singleplayer/ModSelect"]
+
+[node name="Tween" type="Tween" parent="ViewContainer/Singleplayer"]
+
+[node name="Results" type="Control" parent="ViewContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 15 )
+
+[node name="Info" type="Panel" parent="ViewContainer/Results"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -384.0
+margin_right = 384.0
+margin_bottom = 244.0
+
+[node name="Rank" type="Label" parent="ViewContainer/Results/Info"]
+margin_left = 64.0
+margin_top = 23.0
+margin_right = 256.0
+margin_bottom = 114.0
+custom_fonts/font = SubResource( 8 )
+text = "SS"
+align = 1
+valign = 1
+
+[node name="Score" type="Label" parent="ViewContainer/Results/Info"]
+margin_left = 224.0
+margin_top = 59.0
+margin_right = 480.0
+margin_bottom = 100.0
+custom_fonts/font = SubResource( 9 )
+text = "9,999,999"
+align = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="ViewContainer/Results/Info/Score"]
+anchor_right = 1.0
+margin_top = -22.0
+margin_bottom = 12.0
+custom_fonts/font = SubResource( 10 )
+text = "SCORE"
+align = 1
+valign = 2
+
+[node name="Combo" type="Label" parent="ViewContainer/Results/Info"]
+margin_left = 224.0
+margin_top = 115.0
+margin_right = 480.0
+margin_bottom = 156.0
+custom_fonts/font = SubResource( 9 )
+text = "9,999,999"
+align = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="ViewContainer/Results/Info/Combo"]
+anchor_right = 1.0
+margin_top = -22.0
+margin_bottom = 12.0
+custom_fonts/font = SubResource( 10 )
+text = "MAX COMBO"
+align = 1
+valign = 2
+
+[node name="Hits" type="Label" parent="ViewContainer/Results/Info"]
+margin_left = 424.0
+margin_top = 59.0
+margin_right = 680.0
+margin_bottom = 100.0
+custom_fonts/font = SubResource( 9 )
+text = "9,999,999"
+align = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="ViewContainer/Results/Info/Hits"]
+anchor_right = 1.0
+margin_top = -22.0
+margin_bottom = 12.0
+custom_fonts/font = SubResource( 10 )
+text = "HITS"
+align = 1
+valign = 2
+
+[node name="Misses" type="Label" parent="ViewContainer/Results/Info"]
+margin_left = 424.0
+margin_top = 115.0
+margin_right = 680.0
+margin_bottom = 156.0
+custom_fonts/font = SubResource( 9 )
+text = "9,999,999"
+align = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="ViewContainer/Results/Info/Misses"]
+anchor_right = 1.0
+margin_top = -22.0
+margin_bottom = 12.0
+custom_fonts/font = SubResource( 10 )
+text = "MISSES"
+align = 1
+valign = 2
+
+[node name="Accuracy" type="Label" parent="ViewContainer/Results/Info"]
+margin_left = 64.0
+margin_top = 114.0
+margin_right = 256.0
+margin_bottom = 156.0
+custom_fonts/font = SubResource( 11 )
+text = "99.99%"
+align = 1
+valign = 1
+
+[node name="Map" type="Panel" parent="ViewContainer/Results"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -288.0
+margin_top = -140.0
+margin_right = 288.0
+margin_bottom = -28.0
+rect_min_size = Vector2( 0, 72 )
+rect_pivot_offset = Vector2( 576, 0 )
+custom_styles/panel = SubResource( 17 )
+
+[node name="Cover" type="TextureRect" parent="ViewContainer/Results/Map"]
+modulate = Color( 1, 1, 1, 0.627451 )
+material = SubResource( 19 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 2.0
+margin_right = -24.0
+margin_bottom = -2.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 7
+
+[node name="Title" type="Label" parent="ViewContainer/Results/Map"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_right = -32.0
+margin_bottom = -24.0
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 20 )
+text = "The Name of the Song"
+valign = 1
+clip_text = true
+
+[node name="Artist" type="Label" parent="ViewContainer/Results/Map/Title"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -40.0
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 21 )
+text = "The Artist"
+valign = 1
+
+[node name="Mapper" type="Label" parent="ViewContainer/Results/Map/Title"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 48.0
+margin_bottom = -5.0
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 22 )
+text = "Mapper 1, Mapper 2"
+valign = 1
+
+[node name="Difficulty" type="Label" parent="ViewContainer/Results/Map"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_top = 80.0
+margin_right = -32.0
+custom_fonts/font = SubResource( 23 )
+text = "Difficulty Name"
+
+[node name="Retry" type="Button" parent="ViewContainer/Results"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -288.0
+margin_top = 180.0
+margin_right = -32.0
+margin_bottom = 228.0
+
+[node name="Label" type="Label" parent="ViewContainer/Results/Retry"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 6 )
+text = "RETRY"
+align = 1
+valign = 1
+
+[node name="Return" type="Button" parent="ViewContainer/Results"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 32.0
+margin_top = 180.0
+margin_right = 288.0
+margin_bottom = 228.0
+
+[node name="Label" type="Label" parent="ViewContainer/Results/Return"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 6 )
+text = "RETURN"
+align = 1
+valign = 1
+
+[node name="Topbar" type="ColorRect" parent="."]
+anchor_right = 1.0
+margin_bottom = 72.0
+color = Color( 0.141176, 0.141176, 0.141176, 1 )
+
+[node name="Profile" type="Control" parent="Topbar"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -296.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+
+[node name="Avatar" type="TextureRect" parent="Topbar/Profile"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = 48.0
+texture = ExtResource( 3 )
+expand = true
+
+[node name="Background" type="ColorRect" parent="Topbar/Profile/Avatar"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -8.0
+margin_top = -8.0
+margin_right = 8.0
+margin_bottom = 8.0
+color = Color( 0.188235, 0.188235, 0.188235, 1 )
+
+[node name="Username" type="Label" parent="Topbar/Profile"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -224.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 2 )
+text = "Not logged in"
+valign = 2
+
+[node name="Vulnus" type="TextureRect" parent="Topbar"]
+anchor_bottom = 1.0
+margin_top = 12.0
+margin_right = 72.0
+margin_bottom = -12.0
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6

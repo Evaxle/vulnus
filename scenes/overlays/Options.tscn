@@ -1,0 +1,681 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://assets/images/settings.png" type="Texture" id=1]
+[ext_resource path="res://assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/SourceSansPro/SourceSansPro-Semibold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://scripts/menu/Options.cs" type="Script" id=4]
+[ext_resource path="res://assets/themes/Menu.tres" type="Theme" id=5]
+[ext_resource path="res://scripts/menu/components/classes/Slider.cs" type="Script" id=6]
+[ext_resource path="res://scripts/menu/components/options/Volume.cs" type="Script" id=7]
+[ext_resource path="res://scripts/menu/components/classes/Dropdown.cs" type="Script" id=8]
+[ext_resource path="res://scripts/menu/components/classes/DecimalInput.cs" type="Script" id=9]
+[ext_resource path="res://scripts/menu/components/options/CameraSettings.cs" type="Script" id=10]
+[ext_resource path="res://scripts/menu/components/options/Approach.cs" type="Script" id=11]
+[ext_resource path="res://scripts/menu/components/options/RenderSettings.cs" type="Script" id=17]
+[ext_resource path="res://scripts/menu/components/options/PostSettings.cs" type="Script" id=18]
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="DynamicFont" id=3]
+size = 18
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="DynamicFont" id=4]
+size = 18
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="DynamicFont" id=5]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[node name="Options" type="Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = -192.0
+margin_right = 320.0
+margin_bottom = 192.0
+rect_pivot_offset = Vector2( 320, 0 )
+theme = ExtResource( 5 )
+custom_styles/panel = SubResource( 8 )
+script = ExtResource( 4 )
+
+[node name="Topbar" type="ColorRect" parent="."]
+anchor_right = 1.0
+margin_bottom = 32.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="Icon" type="TextureRect" parent="Topbar"]
+margin_top = 6.0
+margin_right = 32.0
+margin_bottom = 26.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="Topbar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_right = -32.0
+custom_fonts/font = SubResource( 3 )
+text = "Settings"
+valign = 1
+
+[node name="Close" type="Button" parent="Topbar"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -32.0
+custom_styles/hover = SubResource( 6 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 6 )
+custom_styles/disabled = SubResource( 6 )
+custom_styles/normal = SubResource( 6 )
+flat = true
+
+[node name="Label" type="Label" parent="Topbar/Close"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 4 )
+text = "X"
+align = 1
+valign = 1
+
+[node name="Content" type="TabContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 32.0
+margin_right = -8.0
+margin_bottom = -40.0
+theme = ExtResource( 5 )
+custom_constants/side_margin = 8
+custom_styles/panel = SubResource( 9 )
+tab_align = 0
+
+[node name="Gameplay" type="Control" parent="Content"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 25.0
+
+[node name="Grid" type="GridContainer" parent="Content/Gameplay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/vseparation = 16
+custom_constants/hseparation = 16
+columns = 2
+
+[node name="Approach" type="Panel" parent="Content/Gameplay/Grid"]
+margin_right = 296.0
+margin_bottom = 271.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Gameplay/Grid/Approach"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_right = -8.0
+script = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Approach/VBoxContainer"]
+margin_right = 280.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 0, 36 )
+custom_fonts/font = SubResource( 5 )
+text = "Approach"
+align = 1
+valign = 1
+
+[node name="Method" type="Control" parent="Content/Gameplay/Grid/Approach/VBoxContainer"]
+margin_top = 40.0
+margin_right = 280.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 8 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Method"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "Setting Mode"
+valign = 1
+
+[node name="OptionButton" type="OptionButton" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Method"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+text = "Dist. & Time"
+items = [ "Dist. & Time", null, false, 0, null, "Dist. & Rate", null, false, 1, null, "Time & Rate", null, false, 2, null ]
+selected = 0
+
+[node name="Distance" type="Control" parent="Content/Gameplay/Grid/Approach/VBoxContainer"]
+margin_top = 76.0
+margin_right = 280.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Distance"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "Approach Distance"
+valign = 1
+
+[node name="SpinBox" type="SpinBox" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Distance"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+min_value = 0.1
+max_value = 50.0
+step = 0.01
+value = 50.0
+allow_greater = true
+suffix = "m"
+
+[node name="Time" type="Control" parent="Content/Gameplay/Grid/Approach/VBoxContainer"]
+margin_top = 112.0
+margin_right = 280.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Time"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "Approach Time"
+valign = 1
+
+[node name="SpinBox" type="SpinBox" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Time"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+value = 1.0
+allow_greater = true
+suffix = "s"
+
+[node name="Speed" type="Control" parent="Content/Gameplay/Grid/Approach/VBoxContainer"]
+margin_top = 148.0
+margin_right = 280.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Speed"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "Approach Rate"
+valign = 1
+
+[node name="SpinBox" type="SpinBox" parent="Content/Gameplay/Grid/Approach/VBoxContainer/Speed"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+min_value = 0.1
+step = 0.01
+value = 0.1
+allow_greater = true
+editable = false
+suffix = "m/s"
+
+[node name="Camera" type="Panel" parent="Content/Gameplay/Grid"]
+margin_left = 312.0
+margin_right = 608.0
+margin_bottom = 271.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Gameplay/Grid/Camera"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_right = -8.0
+custom_constants/separation = 4
+script = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Camera/VBoxContainer"]
+margin_right = 280.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 0, 36 )
+custom_fonts/font = SubResource( 5 )
+text = "Camera"
+align = 1
+valign = 1
+
+[node name="Mode" type="Control" parent="Content/Gameplay/Grid/Camera/VBoxContainer"]
+margin_top = 40.0
+margin_right = 280.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 8 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Camera/VBoxContainer/Mode"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "Camera Mode"
+valign = 1
+
+[node name="OptionButton" type="OptionButton" parent="Content/Gameplay/Grid/Camera/VBoxContainer/Mode"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+text = "Spin"
+items = [ "Spin", null, false, 1, null, "Lock", null, false, 2, null ]
+selected = 0
+
+[node name="Sensitivity" type="Control" parent="Content/Gameplay/Grid/Camera/VBoxContainer"]
+margin_top = 76.0
+margin_right = 280.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="Content/Gameplay/Grid/Camera/VBoxContainer/Sensitivity"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "Sensitivity"
+valign = 1
+
+[node name="SpinBox" type="SpinBox" parent="Content/Gameplay/Grid/Camera/VBoxContainer/Sensitivity"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+min_value = 0.01
+max_value = 10.0
+step = 0.01
+value = 1.0
+allow_greater = true
+
+[node name="Drift" type="CheckButton" parent="Content/Gameplay/Grid/Camera/VBoxContainer"]
+margin_top = 112.0
+margin_right = 280.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 32 )
+focus_mode = 0
+action_mode = 0
+text = "Cursor Drift"
+flat = true
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="Visual" type="Control" parent="Content"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 26.0
+
+[node name="Grid" type="GridContainer" parent="Content/Visual"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/vseparation = 16
+custom_constants/hseparation = 16
+columns = 2
+
+[node name="Render" type="Panel" parent="Content/Visual/Grid"]
+margin_right = 296.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Visual/Grid/Render"]
+anchor_right = 1.0
+margin_left = 8.0
+margin_right = -8.0
+custom_constants/separation = 4
+script = ExtResource( 17 )
+
+[node name="Label" type="Label" parent="Content/Visual/Grid/Render/VBoxContainer"]
+margin_right = 280.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 0, 36 )
+custom_fonts/font = SubResource( 5 )
+text = "Rendering"
+align = 1
+valign = 1
+
+[node name="FPS" type="Control" parent="Content/Visual/Grid/Render/VBoxContainer"]
+margin_top = 40.0
+margin_right = 280.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="Content/Visual/Grid/Render/VBoxContainer/FPS"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+text = "FPS Limit"
+valign = 1
+
+[node name="SpinBox" type="SpinBox" parent="Content/Visual/Grid/Render/VBoxContainer/FPS"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+max_value = 360.0
+allow_greater = true
+
+[node name="VSync" type="CheckButton" parent="Content/Visual/Grid/Render/VBoxContainer"]
+margin_top = 76.0
+margin_right = 280.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 0, 32 )
+focus_mode = 0
+text = "VSync"
+flat = true
+__meta__ = {
+"_edit_group_": true,
+"_editor_description_": ""
+}
+
+[node name="Debanding" type="CheckButton" parent="Content/Visual/Grid/Render/VBoxContainer"]
+margin_top = 112.0
+margin_right = 280.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 32 )
+text = "Debanding"
+flat = true
+__meta__ = {
+"_edit_group_": true,
+"_editor_description_": ""
+}
+
+[node name="RenderScale" type="Control" parent="Content/Visual/Grid/Render/VBoxContainer"]
+margin_top = 148.0
+margin_right = 280.0
+margin_bottom = 184.0
+rect_min_size = Vector2( 0, 36 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_group_": true
+}
+Label = "Render Scale"
+Suffix = "%"
+Value = 100.0
+Max = 200.0
+Min = 5.0
+
+[node name="Slider" type="HSlider" parent="Content/Visual/Grid/Render/VBoxContainer/RenderScale"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -16.0
+value = 100.0
+
+[node name="Label" type="Label" parent="Content/Visual/Grid/Render/VBoxContainer/RenderScale"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_bottom = -16.0
+text = "Render Scale (100%)"
+
+[node name="Post" type="Panel" parent="Content/Visual/Grid"]
+margin_left = 312.0
+margin_right = 608.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Visual/Grid/Post"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_right = -8.0
+custom_constants/separation = 4
+script = ExtResource( 18 )
+
+[node name="Label" type="Label" parent="Content/Visual/Grid/Post/VBoxContainer"]
+margin_right = 280.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 0, 36 )
+custom_fonts/font = SubResource( 5 )
+text = "Post-Processing"
+align = 1
+valign = 1
+
+[node name="Bloom" type="Control" parent="Content/Visual/Grid/Post/VBoxContainer"]
+margin_top = 40.0
+margin_right = 280.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 8 )
+
+[node name="Label" type="Label" parent="Content/Visual/Grid/Post/VBoxContainer/Bloom"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+rect_min_size = Vector2( 0, 36 )
+text = "Bloom Quality"
+valign = 1
+
+[node name="OptionButton" type="OptionButton" parent="Content/Visual/Grid/Post/VBoxContainer/Bloom"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+text = "High"
+items = [ "High", null, false, 0, null, "Low", null, false, 1, null, "Off", null, false, 2, null ]
+selected = 0
+
+[node name="Audio" type="Control" parent="Content"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 26.0
+
+[node name="Volume" type="Panel" parent="Content/Audio"]
+anchor_right = 0.5
+margin_left = 8.0
+margin_top = 8.0
+margin_bottom = 158.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Audio/Volume"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_right = -8.0
+custom_constants/separation = 4
+script = ExtResource( 7 )
+
+[node name="Label" type="Label" parent="Content/Audio/Volume/VBoxContainer"]
+margin_right = 288.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 0, 36 )
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 5 )
+text = "Volume Control"
+align = 1
+valign = 1
+
+[node name="Master" type="Control" parent="Content/Audio/Volume/VBoxContainer"]
+margin_top = 40.0
+margin_right = 288.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 6 )
+Label = "Master Volume"
+Suffix = "%"
+Value = 100.0
+
+[node name="Slider" type="HSlider" parent="Content/Audio/Volume/VBoxContainer/Master"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -16.0
+value = 100.0
+
+[node name="Label" type="Label" parent="Content/Audio/Volume/VBoxContainer/Master"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_bottom = -16.0
+text = "Master Volume (100%)"
+
+[node name="Music" type="Control" parent="Content/Audio/Volume/VBoxContainer"]
+margin_top = 76.0
+margin_right = 288.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 6 )
+Label = "Music Volume"
+Suffix = "%"
+Value = 100.0
+
+[node name="Slider" type="HSlider" parent="Content/Audio/Volume/VBoxContainer/Music"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -16.0
+value = 100.0
+
+[node name="Label" type="Label" parent="Content/Audio/Volume/VBoxContainer/Music"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_bottom = -16.0
+text = "Music Volume (100%)"
+
+[node name="SFX" type="Control" parent="Content/Audio/Volume/VBoxContainer"]
+margin_top = 112.0
+margin_right = 288.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 32 )
+script = ExtResource( 6 )
+Label = "SFX Volume"
+Suffix = "%"
+Value = 100.0
+
+[node name="Slider" type="HSlider" parent="Content/Audio/Volume/VBoxContainer/SFX"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -16.0
+value = 100.0
+
+[node name="Label" type="Label" parent="Content/Audio/Volume/VBoxContainer/SFX"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_bottom = -16.0
+text = "SFX Volume (100%)"
+
+[node name="Account" type="Control" parent="Content"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 26.0
+
+[node name="Status" type="Label" parent="Content/Account"]
+anchor_right = 1.0
+margin_bottom = 30.0
+custom_fonts/font = SubResource( 5 )
+text = "You are not logged in."
+align = 1
+valign = 1
+
+[node name="Unavailable" type="Label" parent="Content/Account"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 30.0
+custom_fonts/font = SubResource( 5 )
+text = "vulnus.net is currently unavailable"
+align = 1
+valign = 1
+
+[node name="Login" type="VBoxContainer" parent="Content/Account"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 192.0
+margin_top = 30.0
+margin_right = -192.0
+margin_bottom = -40.0
+custom_constants/separation = 4
+alignment = 1
+
+[node name="Username" type="LineEdit" parent="Content/Account/Login"]
+margin_top = 70.0
+margin_right = 256.0
+margin_bottom = 100.0
+placeholder_text = "Username"
+
+[node name="Remember" type="CheckBox" parent="Content/Account/Login"]
+margin_top = 104.0
+margin_right = 256.0
+margin_bottom = 126.0
+text = "Remember Username"
+flat = true
+
+[node name="Password" type="LineEdit" parent="Content/Account/Login"]
+margin_top = 130.0
+margin_right = 256.0
+margin_bottom = 160.0
+secret = true
+placeholder_text = "Password"
+
+[node name="Login" type="Button" parent="Content/Account/Login"]
+margin_top = 164.0
+margin_right = 256.0
+margin_bottom = 186.0
+text = "Login"
+
+[node name="RankStatus" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -32.0
+margin_bottom = -2.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "These settings are rankable."
+align = 1
+valign = 1
+
+[node name="Tween" type="Tween" parent="."]
