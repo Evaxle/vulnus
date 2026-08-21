@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Collections.Generic;
 using File = Godot.File;
 using Directory = Godot.Directory;
+using Compatibility.SSP;
 
 namespace Content.Beatmaps
 {
@@ -15,8 +16,8 @@ namespace Content.Beatmaps
 		{
 			if (reset)
 				LoadedMaps = new List<BeatmapSet>();
+			SspmImporter.ImportDirectory(directory);
 			GD.Print("Loading maps from " + directory);
-			// Get a list of cached maps
 			var cachePath = directory.PlusFile(".cache");
 			var cacheDir = new Directory();
 			if (cacheDir.Open(cachePath) != Error.Ok)
@@ -29,14 +30,9 @@ namespace Content.Beatmaps
 			var cacheFileName = cacheDir.GetNext();
 			while (cacheFileName != "")
 			{
-				if (cacheDir.CurrentIsDir())
-				{
-					caches.Add(cacheFileName);
-					// GD.Print("Found cache: " + cacheFileName);
-				}
+				if (cacheDir.CurrentIsDir()) caches.Add(cacheFileName);
 				cacheFileName = cacheDir.GetNext();
 			}
-			// Get a list of existing maps
 			var hashes = new List<string>();
 			var mapsDir = new Directory();
 			mapsDir.Open(directory);
@@ -49,23 +45,19 @@ namespace Content.Beatmaps
 				{
 					var hash = mapFile.GetMd5(directory.PlusFile(mapFileName));
 					hashes.Add(hash);
-					if (LoadedMaps.Find(map => map.Hash == hash) != null)
+					if (LoadedMaps.Find(map => map.Hash == hash) == null)
 					{
-						// GD.Print("Map already loaded: " + hash);
-					}
-					else
-					{
-						if (!caches.Contains(hash)) // If the map isn't already cached, do extraction stuff
+						if (!caches.Contains(hash))
 						{
 							mapFile.Open(directory.PlusFile(mapFileName), File.ModeFlags.Read);
-							var stream = new MemoryStream(mapFile.GetBuffer((long)mapFile.GetLen()));
-							ZipArchive zip = new ZipArchive(stream, ZipArchiveMode.Read);
+							using var stream = new MemoryStream(mapFile.GetBuffer((long)mapFile.GetLen()));
+							using var zip = new ZipArchive(stream, ZipArchiveMode.Read);
 							zip.ExtractToDirectory(cachePath.PlusFile(hash));
 						}
 						try
 						{
 							var map = BeatmapSet.LoadFromPath(cachePath.PlusFile(hash), hash);
-							LoadedMaps.Add(map); // Load map from cache
+							LoadedMaps.Add(map);
 						}
 						catch (Exception e)
 						{
@@ -75,13 +67,9 @@ namespace Content.Beatmaps
 				}
 				mapFileName = mapsDir.GetNext();
 			}
-			// Delete old caches
 			foreach (string hash in caches)
 			{
-				if (!hashes.Contains(hash))
-				{
-					System.IO.Directory.Delete(cachePath.PlusFile(hash), true);
-				}
+				if (!hashes.Contains(hash)) System.IO.Directory.Delete(cachePath.PlusFile(hash), true);
 			}
 			if (mapFile.IsOpen()) mapFile.Close();
 			return true;
