@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 using Content.Beatmaps;
 
@@ -12,20 +14,15 @@ namespace Gameplay
 		public static BeatmapSet LoadedMapset;
 		public static Beatmap LoadedMap;
 		public static BeatmapData LoadedMapData;
-
 		public static Score Score;
 		public static ModList Mods = new ModList();
-
 		public GameCamera Camera;
 		public Spatial Cursor;
 		public Spatial GhostCursor;
-
 		public NoteManager NoteManager;
 		public NoteRenderer NoteRenderer;
 		public SyncManager SyncManager;
-
 		public HUDManager HUDManager;
-
 		public bool Ended;
 		public bool CanFail;
 
@@ -34,59 +31,30 @@ namespace Gameplay
 			Camera = GetNode<GameCamera>("Camera");
 			Cursor = GetNode<Spatial>("Cursor");
 			GhostCursor = GetNode<Spatial>("GhostCursor");
-
 			NoteManager = GetNode<NoteManager>("NoteManager");
 			NoteRenderer = NoteManager.GetNode<NoteRenderer>("NoteRenderer");
 			SyncManager = GetNode<SyncManager>("SyncManager");
-
 			HUDManager = GetNode<HUDManager>("HUD");
-
 			Score = new Score();
-
 			CanFail = false;
 			Ended = false;
-
 			Camera.Cursor = Cursor;
 			Camera.GhostCursor = GhostCursor;
-
 			if (LoadedMapset == null || LoadedMapData == null)
 			{
 				Global.Instance.GotoScene("res://scenes/MainMenu.tscn");
 				return;
 			}
-
+			RhythKitBridge.Send("MapStarted", true, LoadedMapset.RhythiansMapId);
 			SyncManager.SetStream(LoadedMapset.LoadAudio());
 			SyncManager.Ended += GameEnded;
-
 			NoteManager.NoteHit += OnNoteHit;
 			NoteManager.NoteMiss += OnNoteMiss;
-
-			if (Mods.Any(m => m is IApplicableToGame))
-			{
-				foreach (var mod in Mods.OfType<IApplicableToGame>())
-					mod.ApplyToGame(this);
-			}
-			if (Mods.Any(m => m is IApplicableToNoteManager))
-			{
-				foreach (var mod in Mods.OfType<IApplicableToNoteManager>())
-					mod.ApplyToNoteManager(NoteManager);
-			}
-			if (Mods.Any(m => m is IApplicableToNoteRenderer))
-			{
-				foreach (var mod in Mods.OfType<IApplicableToNoteRenderer>())
-					mod.ApplyToNoteManager(NoteRenderer);
-			}
-			if (Mods.Any(m => m is IApplicableToSyncManager))
-			{
-				foreach (var mod in Mods.OfType<IApplicableToSyncManager>())
-					mod.ApplyToSyncManager(SyncManager);
-			}
-			if (Mods.Any(m => m is IApplicableToHUDManager))
-			{
-				foreach (var mod in Mods.OfType<IApplicableToHUDManager>())
-					mod.ApplyToHUDManager(HUDManager);
-			}
-
+			if (Mods.Any(m => m is IApplicableToGame)) foreach (var mod in Mods.OfType<IApplicableToGame>()) mod.ApplyToGame(this);
+			if (Mods.Any(m => m is IApplicableToNoteManager)) foreach (var mod in Mods.OfType<IApplicableToNoteManager>()) mod.ApplyToNoteManager(NoteManager);
+			if (Mods.Any(m => m is IApplicableToNoteRenderer)) foreach (var mod in Mods.OfType<IApplicableToNoteRenderer>()) mod.ApplyToNoteManager(NoteRenderer);
+			if (Mods.Any(m => m is IApplicableToSyncManager)) foreach (var mod in Mods.OfType<IApplicableToSyncManager>()) mod.ApplyToSyncManager(SyncManager);
+			if (Mods.Any(m => m is IApplicableToHUDManager)) foreach (var mod in Mods.OfType<IApplicableToHUDManager>()) mod.ApplyToHUDManager(HUDManager);
 			Global.Discord.SetActivity(new Discord.ActivityW(
 				state: "Playing a map",
 				details: $"{LoadedMapset.Name} - {LoadedMap.Name}",
@@ -96,8 +64,7 @@ namespace Gameplay
 		}
 		public override void _PhysicsProcess(float delta)
 		{
-			if (Input.IsActionJustPressed("skip") && SyncManager.CanSkip())
-				SyncManager.AttemptSkip();
+			if (Input.IsActionJustPressed("skip") && SyncManager.CanSkip()) SyncManager.AttemptSkip();
 			if (Input.IsActionJustPressed("force_end"))
 			{
 				Score.Failed = true;
@@ -113,10 +80,7 @@ namespace Gameplay
 		{
 			Options opt = (Options)Global.Instance.Overlays["Options"];
 			opt.CanOpen = false;
-			if (opt.IsActive)
-			{
-				opt.SetActive(false);
-			}
+			if (opt.IsActive) opt.SetActive(false);
 		}
 		public override void _ExitTree()
 		{
@@ -133,8 +97,7 @@ namespace Gameplay
 				Score.Multiplier = Mathf.Min(8, Score.Multiplier + 1);
 			}
 			Score.Combo += 1;
-			if (Score.Combo > Score.HighestCombo)
-				Score.HighestCombo = Score.Combo;
+			if (Score.Combo > Score.HighestCombo) Score.HighestCombo = Score.Combo;
 			Score.Total += 1;
 			if (!Score.Failed) Score.Health = Math.Min(10, Score.Health + 10.0 / 8.0);
 			HUDManager.ManualUpdate(Score);
@@ -151,8 +114,21 @@ namespace Gameplay
 		}
 		public void GameEnded()
 		{
+			if (Ended) return;
 			Ended = true;
 			SyncManager.AudioPlayer.Stop();
+			var mapId = LoadedMapset?.RhythiansMapId;
+			if (!string.IsNullOrWhiteSpace(mapId) && Score.Total > 0)
+			{
+				var accuracy = Math.Clamp((double)(Score.Total - Score.Misses) / Score.Total * 100.0, 0, 100);
+				var scoreKey = $"vulnus:{mapId}:{Score.Points}:{Score.Total}:{Score.Misses}:{Score.HighestCombo}";
+				var clientScoreId = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(scoreKey))).ToLowerInvariant();
+				RhythKitBridge.Send("MapCompleted", true, mapId, clientScoreId, accuracy, Score.Misses, SyncManager.Speed, !Score.Failed);
+			}
+			else
+			{
+				RhythKitBridge.Send("MapEnded", true, mapId);
+			}
 			Global.Instance.GotoScene("res://scenes/MainMenu.tscn");
 		}
 	}
