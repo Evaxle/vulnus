@@ -18,8 +18,24 @@ public class Startup : Node
 		if (hasRun)
 			return;
 		hasRun = true;
+		if (TryHandleRhythKitConversion())
+			return;
 		StageReached += OnStageReached;
 		task = Task.Run(Run);
+	}
+	private bool TryHandleRhythKitConversion()
+	{
+		var args = OS.GetCmdlineArgs();
+		for (var i = 0; i < args.Length - 1; i++)
+		{
+			if (!string.Equals(args[i], "--rhythkit-convert-sspm", StringComparison.OrdinalIgnoreCase)) continue;
+			var input = args[i + 1];
+			var result = Compatibility.SSP.SspmImporter.Import(input);
+			GD.Print(result == null ? "RhythKit SSPM conversion failed" : $"RhythKit SSPM conversion complete: {result}");
+			GetTree().Quit(result == null ? 1 : 0);
+			return true;
+		}
+		return false;
 	}
 	public void OnStageReached(string stage, bool end)
 	{
@@ -50,7 +66,7 @@ public class Startup : Node
 		counter += delta;
 		var dots = (int)(counter * 3) % 4;
 		label.Text = text + new string('.', dots);
-		if (task.IsFaulted)
+		if (task != null && task.IsFaulted)
 			throw task.Exception;
 	}
 	public void LoadMaps()
