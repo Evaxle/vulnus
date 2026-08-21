@@ -8,7 +8,7 @@ public static class RhythKitBridge
     private static readonly string DirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CapoRhythia", "Rhythians", "bridge");
     private static readonly string EventPath = Path.Combine(DirectoryPath, "events-vulnus.jsonl");
 
-    public static void Send(string eventName, bool running, string? mapId = null, string? clientScoreId = null, double? accuracy = null, int? misses = null, double? speed = null, bool? qualified = null)
+    public static void Send(string eventName, bool running, string mapId = null, string clientScoreId = null, double? accuracy = null, int? misses = null, double? speed = null, bool? qualified = null)
     {
         try
         {
