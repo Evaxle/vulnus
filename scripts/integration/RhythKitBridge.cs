@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.IO;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 public static class RhythKitBridge
 {
@@ -29,7 +29,7 @@ public static class RhythKitBridge
                 CompletedAt = DateTimeOffset.UtcNow,
                 ResultQualified = qualified
             };
-            File.AppendAllText(EventPath, JsonSerializer.Serialize(payload) + Environment.NewLine);
+            File.AppendAllText(EventPath, JsonConvert.SerializeObject(payload) + Environment.NewLine);
         }
         catch (Exception e)
         {
