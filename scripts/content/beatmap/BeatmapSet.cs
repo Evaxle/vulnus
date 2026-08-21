@@ -18,6 +18,8 @@ namespace Content.Beatmaps
 		public string Hash;
 		[NonSerialized]
 		public string Path;
+		[JsonProperty("rhythiansMapId")]
+		public string RhythiansMapId;
 	}
 	[Serializable, JsonObject(MemberSerialization.OptIn)]
 	public class BeatmapSet : BeatmapSetInfo
@@ -26,38 +28,19 @@ namespace Content.Beatmaps
 		public string Artist;
 		[JsonProperty("_title")]
 		public string Title;
-		public string Name
-		{
-			get
-			{
-				return $"{Artist} - {Title}";
-			}
-		}
+		public string Name => $"{Artist} - {Title}";
 		[JsonProperty("_difficulties")]
 		public List<string> _difficulties;
 		public List<Beatmap> Difficulties;
 		[JsonProperty("_mappers")]
 		public List<string> _mappers;
-		public string Mappers
-		{
-			get
-			{
-				return string.Join(", ", _mappers.ToArray());
-			}
-		}
+		public string Mappers => string.Join(", ", _mappers.ToArray());
 		[JsonProperty("_music")]
 		public string Music;
 		public static BeatmapSet Load(string json)
 		{
 			var version = JsonConvert.DeserializeObject<BeatmapSetInfo>(json);
-			BeatmapSet map;
-			switch (version.FormatVersion)
-			{
-				default:
-					map = JsonConvert.DeserializeObject<BeatmapSet>(json);
-					break;
-			}
-			return map;
+			return JsonConvert.DeserializeObject<BeatmapSet>(json);
 		}
 		public static BeatmapSet LoadFromPath(string path, string hash)
 		{
@@ -65,20 +48,15 @@ namespace Content.Beatmaps
 			var file = new File();
 			if (file.Open(path.PlusFile("cache.bin"), File.ModeFlags.Read) == Error.Ok)
 			{
-				// GD.Print("Loading map from cache: " + path);
 				var deserializer = new BinaryFormatter();
 				var buffer = file.GetBuffer((long)file.GetLen());
 				var stream = new MemoryStream(buffer);
 				var cachedMap = (BeatmapSet)deserializer.Deserialize(stream);
 				cachedMap.Path = path;
 				cachedMap.Hash = hash;
-				foreach (Beatmap difficulty in cachedMap.Difficulties)
-				{
-					difficulty.Mapset = cachedMap;
-				}
+				foreach (Beatmap difficulty in cachedMap.Difficulties) difficulty.Mapset = cachedMap;
 				return cachedMap;
 			}
-			// GD.Print("Loading map without cache: " + path);
 			file.Open(path.PlusFile("meta.json"), File.ModeFlags.Read);
 			var map = BeatmapSet.Load(file.GetAsText());
 			map.Path = path;
@@ -133,9 +111,6 @@ namespace Content.Beatmaps
 			Cover = texture;
 			return texture;
 		}
-		public AudioStream LoadAudio()
-		{
-			return AudioHandler.LoadAudio(Path.PlusFile(Music));
-		}
+		public AudioStream LoadAudio() => AudioHandler.LoadAudio(Path.PlusFile(Music));
 	}
 }
