@@ -15,3 +15,17 @@ build/
 
 # VSC
 .vscode/
+
+# Unity build artifacts (should not be in source)
+*.exe
+*.dll
+Vulnus_Data/
+Logs/
+doorstop_config.ini
+winhttp.dll
+
+# BepInEx mod framework
+BepInEx/
+
+# Godot export builds
+exports/

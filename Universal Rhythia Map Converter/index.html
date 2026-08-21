@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rhythia Universal Map Converter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-full">
+  <div class="app">
+    <header class="header">
+      <div class="title">Rhythia Universal Map Converter</div>
+      <div class="selector-group settings-active">
+        <button id="tabSettings" class="selector-button active">Settings</button>
+        <button id="tabConverter" class="selector-button">Converter</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="settingsView" class="main-card">
+        <div class="section-title">Settings</div>
+        <div class="settings-row">
+          <div class="settings-block">
+            <div class="settings-label">Display mode</div>
+            <div class="settings-options">
+              <label class="settings-option">
+                <input type="radio" name="mode" value="full" checked>
+                <span>Full mode</span>
+              </label>
+              <label class="settings-option">
+                <input type="radio" name="mode" value="lyte">
+                <span>Lyte mode</span>
+              </label>
+            </div>
+          </div>
+          <div class="settings-block">
+            <div class="settings-label">Download format</div>
+            <div class="settings-options">
+              <label class="settings-option">
+                <input type="radio" name="downloadFormat" value="zip" checked>
+                <span>Zipped files</span>
+              </label>
+              <label class="settings-option">
+                <input type="radio" name="downloadFormat" value="separate">
+                <span>Separate files</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="converterView" class="main-card hidden">
+        <div class="converter-top">
+          <div class="section-title">Converter</div>
+          <div class="converter-toggle r2v-active">
+            <button id="converterR2VBtn" class="converter-toggle-button active">Rhythia → Vulnus</button>
+            <button id="converterV2RBtn" class="converter-toggle-button">Vulnus → Rhythia</button>
+            <div class="converter-toggle-indicator"></div>
+          </div>
+        </div>
+
+        <div class="converter-body">
+          <!-- Rhythia → Vulnus -->
+          <div id="r2vForm">
+            <div class="form-group">
+              <div class="label">Rhythia .txt data</div>
+              <textarea
+                id="rhythiaInput"
+                class="textarea"
+                placeholder="kuratsuki_monoqlom_-_scenic_beauty,2|0|6750,0.5|1.5|6870,2|2|6990,... (supports fractional lanes)">
+              </textarea>
+            </div>
+
+            <div class="inline-row">
+              <div class="form-group">
+                <div class="label">Title</div>
+                <input id="titleInput" class="input" type="text" placeholder="Song title">
+              </div>
+              <div class="form-group">
+                <div class="label">Artist</div>
+                <input id="artistInput" class="input" type="text" placeholder="Artist">
+              </div>
+            </div>
+
+            <div class="inline-row">
+              <div class="form-group">
+                <div class="label">Mapper</div>
+                <input id="mapperInput" class="input" type="text" placeholder="Mapper">
+              </div>
+              <div class="form-group">
+                <div class="label">Map name</div>
+                <input id="mapNameInput" class="input" type="text" placeholder="Map name (e.g. 99:33 AM)">
+              </div>
+            </div>
+
+            <div class="inline-row">
+              <div class="form-group">
+                <div class="label">Difficulty filename</div>
+                <input id="difficultyInput" class="input" type="text" value="official.json">
+              </div>
+              <div class="form-group">
+                <div class="label">MP3 filename (fallback)</div>
+                <input id="mp3NameInput" class="input" type="text" placeholder="2351332739.mp3">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="label">MP3 file upload (optional)</div>
+              <input id="mp3FileInput" class="file-input" type="file" accept="audio/mpeg,audio/mp3">
+            </div>
+
+            <button id="convertR2V" class="convert-button">
+              <span class="convert-icon">⟲</span>
+              <span>Convert Rhythia → Vulnus</span>
+            </button>
+            <div id="statusR2V" class="status"></div>
+          </div>
+
+          <!-- Vulnus → Rhythia -->
+          <div id="v2rForm" class="hidden">
+            <div class="form-group">
+              <div class="label">Vulnus converted.json</div>
+              <textarea
+                id="convertedJsonInput"
+                class="textarea"
+                placeholder='{"_approachDistance":50,"_approachTime":1,"_name":"99:33 AM","_notes":[{"_time":6.75,"_x":1,"_y":-1},{"_time":6.87,"_x":0.5,"_y":0.5}]}'></textarea>
+            </div>
+            <div class="form-group">
+              <div class="label">MP3 name prefix</div>
+              <input id="mp3PrefixInput" class="input" type="text" placeholder="kuratsuki_monoqlom_-_scenic_beauty">
+            </div>
+            <button id="convertV2R" class="convert-button">
+              <span class="convert-icon">⟲</span>
+              <span>Convert Vulnus → Rhythia</span>
+            </button>
+            <div id="statusV2R" class="status"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
