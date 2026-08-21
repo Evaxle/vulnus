@@ -117,13 +117,18 @@ namespace Gameplay
 			if (Ended) return;
 			Ended = true;
 			SyncManager.AudioPlayer.Stop();
-			var mapId = LoadedMapset?.RhythiansMapId;
+			var mapId = LoadedMapset == null ? null : LoadedMapset.RhythiansMapId;
 			if (!string.IsNullOrWhiteSpace(mapId) && Score.Total > 0)
 			{
-				var accuracy = Math.Clamp((double)(Score.Total - Score.Misses) / Score.Total * 100.0, 0, 100);
+				var accuracy = (double)(Score.Total - Score.Misses) / Score.Total * 100.0;
+				accuracy = Math.Max(0, Math.Min(100, accuracy));
 				var scoreKey = $"vulnus:{mapId}:{Score.Points}:{Score.Total}:{Score.Misses}:{Score.HighestCombo}";
-				var clientScoreId = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(scoreKey))).ToLowerInvariant();
-				RhythKitBridge.Send("MapCompleted", true, mapId, clientScoreId, accuracy, Score.Misses, SyncManager.Speed, !Score.Failed);
+				using (var sha = SHA256.Create())
+				{
+					var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(scoreKey));
+					var clientScoreId = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+					RhythKitBridge.Send("MapCompleted", true, mapId, clientScoreId, accuracy, Score.Misses, SyncManager.Speed, !Score.Failed);
+				}
 			}
 			else
 			{
