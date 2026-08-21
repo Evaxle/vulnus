@@ -1,0 +1,263 @@
+[gd_scene load_steps=34 format=2]
+
+[ext_resource path="res://assets/skin/Block.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://scripts/gameplay/GameCamera.cs" type="Script" id=2]
+[ext_resource path="res://assets/skin/cursor.png" type="Texture" id=3]
+[ext_resource path="res://scripts/gameplay/Game.cs" type="Script" id=4]
+[ext_resource path="res://assets/skin/grid_minimal.png" type="Texture" id=5]
+[ext_resource path="res://scripts/gameplay/managers/NoteManager.cs" type="Script" id=6]
+[ext_resource path="res://scripts/gameplay/managers/NoteRenderer.cs" type="Script" id=7]
+[ext_resource path="res://scripts/gameplay/managers/SyncManager.cs" type="Script" id=8]
+[ext_resource path="res://scripts/gameplay/managers/HUDManager.cs" type="Script" id=9]
+[ext_resource path="res://prefabs/hud/LeftPanel.tscn" type="PackedScene" id=10]
+[ext_resource path="res://prefabs/hud/RightPanel.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scripts/gameplay/EnvironmentEffects.cs" type="Script" id=12]
+[ext_resource path="res://prefabs/hud/Health.tscn" type="PackedScene" id=13]
+
+[sub_resource type="Environment" id=2]
+background_mode = 1
+background_color = Color( 0.0117647, 0.0117647, 0.0117647, 1 )
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 0.5
+ambient_light_sky_contribution = 0.0
+auto_exposure_scale = 0.15
+auto_exposure_max_luma = 0.5
+auto_exposure_speed = 0.2
+ssao_edge_sharpness = 3.0
+dof_blur_near_enabled = true
+dof_blur_near_distance = 1.0
+dof_blur_near_transition = 0.5
+glow_enabled = true
+glow_levels/1 = true
+glow_levels/5 = false
+glow_levels/6 = true
+glow_levels/7 = true
+glow_intensity = 0.6
+glow_strength = 0.8
+glow_bloom = 0.05
+glow_blend_mode = 0
+glow_hdr_threshold = 0.8
+glow_hdr_scale = 1.8
+glow_bicubic_upscale = true
+glow_high_quality = true
+adjustment_enabled = true
+
+[sub_resource type="PlaneMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_transparent = true
+albedo_color = Color( 1.2, 1.2, 1.2, 1 )
+albedo_texture = ExtResource( 5 )
+
+[sub_resource type="PlaneMesh" id=6]
+size = Vector2( 0.525, 0.525 )
+
+[sub_resource type="SpatialMaterial" id=7]
+render_priority = 3
+flags_transparent = true
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="SpatialMaterial" id=10]
+render_priority = 3
+flags_transparent = true
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="SpatialMaterial" id=9]
+render_priority = 2
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="MultiMesh" id=8]
+transform_format = 1
+instance_count = 1
+mesh = ExtResource( 1 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[sub_resource type="QuadMesh" id=11]
+size = Vector2( 1, 2 )
+
+[sub_resource type="ViewportTexture" id=13]
+flags = 4
+viewport_path = NodePath("HUD/LeftHUD")
+
+[sub_resource type="SpatialMaterial" id=12]
+resource_local_to_scene = true
+flags_transparent = true
+albedo_color = Color( 1.2, 1.2, 1.2, 1 )
+albedo_texture = SubResource( 13 )
+
+[sub_resource type="ViewportTexture" id=14]
+flags = 4
+viewport_path = NodePath("HUD/RightHUD")
+
+[sub_resource type="SpatialMaterial" id=15]
+resource_local_to_scene = true
+flags_transparent = true
+albedo_color = Color( 1.2, 1.2, 1.2, 1 )
+albedo_texture = SubResource( 14 )
+
+[sub_resource type="QuadMesh" id=16]
+size = Vector2( 6, 0.1 )
+
+[sub_resource type="ViewportTexture" id=17]
+flags = 4
+viewport_path = NodePath("HUD/HealthHUD")
+
+[sub_resource type="SpatialMaterial" id=18]
+resource_local_to_scene = true
+render_priority = 1
+albedo_color = Color( 1.2, 1.2, 1.2, 1 )
+albedo_texture = SubResource( 17 )
+
+[sub_resource type="Gradient" id=19]
+interpolation_mode = 2
+offsets = PoolRealArray( 0.5, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.141176 )
+
+[sub_resource type="GradientTexture2D" id=20]
+gradient = SubResource( 19 )
+width = 1
+use_hdr = true
+fill_from = Vector2( 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=21]
+flags_transparent = true
+flags_disable_ambient_light = true
+params_blend_mode = 1
+params_cull_mode = 1
+params_billboard_keep_scale = true
+albedo_texture = SubResource( 20 )
+emission_enabled = true
+emission = Color( 1, 1, 1, 1 )
+emission_energy = 2.0
+emission_operator = 0
+emission_on_uv2 = false
+emission_texture = SubResource( 20 )
+
+[sub_resource type="CylinderMesh" id=22]
+material = SubResource( 21 )
+top_radius = 0.5
+
+[node name="Game" type="Spatial"]
+process_priority = 2
+script = ExtResource( 4 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
+script = ExtResource( 12 )
+
+[node name="SyncManager" type="Node" parent="."]
+process_priority = 1
+script = ExtResource( 8 )
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="SyncManager"]
+bus = "Music"
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7 )
+current = true
+near = 0.01
+far = 500.0
+script = ExtResource( 2 )
+
+[node name="Grid" type="MeshInstance" parent="."]
+transform = Transform( 3, 0, 0, 0, -4.37114e-08, -3, 0, 1, -1.31134e-07, 0, 0, 0 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="Cursor" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+layers = 3
+mesh = SubResource( 6 )
+material/0 = SubResource( 7 )
+
+[node name="GhostCursor" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+layers = 3
+material_override = SubResource( 10 )
+mesh = SubResource( 6 )
+material/0 = SubResource( 7 )
+
+[node name="NoteManager" type="Node" parent="."]
+process_priority = 1
+script = ExtResource( 6 )
+
+[node name="NoteRenderer" type="MultiMeshInstance" parent="NoteManager"]
+process_priority = 1
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15 )
+layers = 4
+material_override = SubResource( 9 )
+cast_shadow = 0
+multimesh = SubResource( 8 )
+script = ExtResource( 7 )
+
+[node name="HUD" type="Spatial" parent="."]
+script = ExtResource( 9 )
+
+[node name="LeftHUD" type="Viewport" parent="HUD"]
+size = Vector2( 360, 720 )
+size_override_stretch = true
+transparent_bg = true
+handle_input_locally = false
+msaa = 3
+fxaa = true
+disable_3d = true
+render_target_v_flip = true
+gui_disable_input = true
+gui_snap_controls_to_pixels = false
+
+[node name="UI" parent="HUD/LeftHUD" instance=ExtResource( 10 )]
+
+[node name="RightHUD" type="Viewport" parent="HUD"]
+size = Vector2( 360, 720 )
+size_override_stretch = true
+transparent_bg = true
+handle_input_locally = false
+msaa = 3
+fxaa = true
+disable_3d = true
+render_target_v_flip = true
+gui_disable_input = true
+gui_snap_controls_to_pixels = false
+
+[node name="UI" parent="HUD/RightHUD" instance=ExtResource( 11 )]
+
+[node name="HealthHUD" type="Viewport" parent="HUD"]
+size = Vector2( 600, 10 )
+size_override_stretch = true
+handle_input_locally = false
+msaa = 3
+fxaa = true
+disable_3d = true
+render_target_v_flip = true
+gui_disable_input = true
+gui_snap_controls_to_pixels = false
+
+[node name="UI" parent="HUD/HealthHUD" instance=ExtResource( 13 )]
+
+[node name="LeftPanel" type="MeshInstance" parent="HUD"]
+transform = Transform( 8.66025, 0, 0.5, 0, 10, 0, -5, 0, 0.866025, -18, 0, -28 )
+layers = 3
+mesh = SubResource( 11 )
+material/0 = SubResource( 12 )
+
+[node name="RightPanel" type="MeshInstance" parent="HUD"]
+transform = Transform( 8.66025, 0, -0.5, 0, 10, 0, 5, 0, 0.866025, 18, 0, -28 )
+layers = 3
+mesh = SubResource( 11 )
+material/0 = SubResource( 15 )
+
+[node name="HealthPanel" type="MeshInstance" parent="HUD"]
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, -3.5, -0.5 )
+layers = 3
+mesh = SubResource( 16 )
+material/0 = SubResource( 18 )
+
+[node name="SpotLight" type="MeshInstance" parent="."]
+transform = Transform( -0.965926, -5.17638, 0, 0.258819, -19.3185, 0, 0, 0, 1, -20, 6, -80 )
+visible = false
+mesh = SubResource( 22 )
+skeleton = NodePath("")
+
+[node name="Background" type="Spatial" parent="."]
