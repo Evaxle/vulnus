@@ -23,6 +23,7 @@ public class Global : Node
 	public override void _Ready()
 	{
 		Input.UseAccumulatedInput = false;
+		RhythKitBridge.Send("VulnusReady", true);
 		var mattPath = ProjectSettings.GlobalizePath("user://").PlusFile("matt.jpg");
 		if (System.IO.File.Exists(mattPath))
 		{
@@ -55,9 +56,7 @@ public class Global : Node
 		GetTree().Root.AddChild(Overlay);
 		GetTree().Root.MoveChild(Overlay, 2);
 		foreach (Control overlay in Overlay.GetChildren())
-		{
 			Overlays.Add(overlay.Name, overlay);
-		}
 	}
 	public void GotoScene(string path, Action<Node> callback = null)
 	{
