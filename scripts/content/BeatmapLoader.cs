@@ -18,6 +18,24 @@ namespace Content.Beatmaps
 				LoadedMaps = new List<BeatmapSet>();
 			SspmImporter.ImportDirectory(directory);
 			GD.Print("Loading maps from " + directory);
+			foreach (var mapDirectory in System.IO.Directory.GetDirectories(directory))
+			{
+				var mapName = Path.GetFileName(mapDirectory);
+				if (string.IsNullOrWhiteSpace(mapName) || mapName.StartsWith(".", StringComparison.Ordinal) || !System.IO.File.Exists(Path.Combine(mapDirectory, "meta.json")))
+					continue;
+				var hash = "folder_" + mapName;
+				if (LoadedMaps.Find(map => map.Hash == hash) != null)
+					continue;
+				try
+				{
+					var map = BeatmapSet.LoadFromPath(mapDirectory, hash);
+					LoadedMaps.Add(map);
+				}
+				catch (Exception e)
+				{
+					GD.PrintErr($"{mapName}: {e.Message}");
+				}
+			}
 			var cachePath = directory.PlusFile(".cache");
 			var cacheDir = new Directory();
 			if (cacheDir.Open(cachePath) != Error.Ok)
