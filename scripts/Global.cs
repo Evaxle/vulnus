@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Global : Node
 {
-	public static string MapPath = ProjectSettings.GlobalizePath("res://maps");
+	public static string MapPath = OS.HasFeature("editor") ? ProjectSettings.GlobalizePath("res://maps") : OS.GetExecutablePath().GetBaseDir().PlusFile("maps");
 
 	public static Global Instance;
 	public static Discord.DiscordW Discord;
