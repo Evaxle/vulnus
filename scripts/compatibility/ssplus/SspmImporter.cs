@@ -10,21 +10,20 @@ namespace Compatibility.SSP
 {
     public static class SspmImporter
     {
-        public static string? Import(string path)
+        public static string Import(string path)
         {
             try
             {
-                using var stream = File.OpenRead(path);
-                using var reader = new BinaryReader(stream, System.Text.Encoding.UTF8, true);
-                if (reader.ReadUInt32() != 0x6D2B5353) return null;
-                var version = reader.ReadUInt16();
-                stream.Position = 0;
-                return version switch
+                using (var stream = File.OpenRead(path))
+                using (var reader = new BinaryReader(stream, System.Text.Encoding.UTF8, true))
                 {
-                    1 => ImportV1(reader, path),
-                    2 => ImportV2(reader, path),
-                    _ => null
-                };
+                    if (reader.ReadUInt32() != 0x6D2B5353) return null;
+                    var version = reader.ReadUInt16();
+                    stream.Position = 0;
+                    if (version == 1) return ImportV1(reader);
+                    if (version == 2) return ImportV2(reader);
+                    return null;
+                }
             }
             catch (Exception e)
             {
@@ -39,37 +38,39 @@ namespace Compatibility.SSP
             foreach (var path in Directory.GetFiles(directory, "*.sspm", SearchOption.TopDirectoryOnly)) Import(path);
         }
 
-        public static string? ReadMapId(string path)
+        public static string ReadMapId(string path)
         {
             try
             {
-                using var stream = File.OpenRead(path);
-                using var reader = new BinaryReader(stream, System.Text.Encoding.UTF8, true);
-                if (reader.ReadUInt32() != 0x6D2B5353) return null;
-                var version = reader.ReadUInt16();
-                if (version == 1)
+                using (var stream = File.OpenRead(path))
+                using (var reader = new BinaryReader(stream, System.Text.Encoding.UTF8, true))
                 {
+                    if (reader.ReadUInt32() != 0x6D2B5353) return null;
+                    var version = reader.ReadUInt16();
+                    if (version == 1)
+                    {
+                        reader.ReadUInt16();
+                        return ReadLine(reader);
+                    }
+                    if (version != 2) return null;
+                    reader.ReadUInt32();
+                    reader.ReadBytes(20);
+                    reader.ReadUInt32();
+                    reader.ReadUInt32();
+                    reader.ReadUInt32();
+                    reader.ReadByte();
                     reader.ReadUInt16();
-                    return ReadLine(reader);
+                    reader.ReadByte();
+                    reader.ReadByte();
+                    reader.ReadByte();
+                    for (var i = 0; i < 10; i++) reader.ReadUInt64();
+                    return ReadString(reader);
                 }
-                if (version != 2) return null;
-                reader.ReadUInt32();
-                reader.ReadBytes(20);
-                reader.ReadUInt32();
-                reader.ReadUInt32();
-                reader.ReadUInt32();
-                reader.ReadByte();
-                reader.ReadUInt16();
-                reader.ReadByte();
-                reader.ReadByte();
-                reader.ReadByte();
-                for (var i = 0; i < 10; i++) reader.ReadUInt64();
-                return ReadString(reader);
             }
             catch { return null; }
         }
 
-        private static string? ImportV1(BinaryReader reader, string path)
+        private static string ImportV1(BinaryReader reader)
         {
             reader.ReadUInt32();
             reader.ReadUInt16();
@@ -105,12 +106,12 @@ namespace Compatibility.SSP
                 notes.Add(Note(time, x, y, id));
             }
             var separator = mapName.IndexOf(" - ", StringComparison.Ordinal);
-            var artist = separator > 0 ? mapName[..separator] : string.Empty;
-            var title = separator > 0 ? mapName[(separator + 3)..] : mapName;
+            var artist = separator > 0 ? mapName.Substring(0, separator) : string.Empty;
+            var title = separator > 0 ? mapName.Substring(separator + 3) : mapName;
             return WriteVulnus(id, artist, title, mapper, difficulty, notes, audio, cover);
         }
 
-        private static string? ImportV2(BinaryReader reader, string path)
+        private static string ImportV2(BinaryReader reader)
         {
             reader.ReadUInt32();
             reader.ReadUInt16();
@@ -140,6 +141,7 @@ namespace Compatibility.SSP
             var mapperCount = reader.ReadUInt16();
             var mappers = new List<string>();
             for (var i = 0; i < mapperCount; i++) mappers.Add(ReadString(reader));
+            if (definitionsOffset == 0) return ImportV2Optimized(reader, noteCount, markerCount, difficulty, hasAudio, hasCover, audioOffset, audioLength, coverOffset, coverLength, markersOffset, id, mapName, mappers);
             reader.BaseStream.Position = (long)definitionsOffset;
             var definitionCount = reader.ReadByte();
             var definitions = new List<List<byte>>();
@@ -190,24 +192,58 @@ namespace Compatibility.SSP
             }
             if (notes.Count != noteCount) return null;
             var separator = mapName.IndexOf(" - ", StringComparison.Ordinal);
-            var artist = separator > 0 ? mapName[..separator] : string.Join(" & ", mappers);
-            var title = separator > 0 ? mapName[(separator + 3)..] : mapName;
+            var artist = separator > 0 ? mapName.Substring(0, separator) : string.Join(" & ", mappers);
+            var title = separator > 0 ? mapName.Substring(separator + 3) : mapName;
             return WriteVulnus(id, artist, title, string.Join(" & ", mappers), difficulty, notes, audio, cover);
         }
 
-        private static JObject Note(uint time, float x, float y, string id) => new()
+        private static string ImportV2Optimized(BinaryReader reader, uint noteCount, uint markerCount, string difficulty, bool hasAudio, bool hasCover, ulong audioOffset, ulong audioLength, ulong coverOffset, ulong coverLength, ulong markersOffset, string id, string mapName, List<string> mappers)
         {
-            ["_time"] = time / 1000f,
-            ["_x"] = x,
-            ["_y"] = y,
-            ["rhythiansMapId"] = id
-        };
+            var audio = hasAudio ? ReadBlock(reader, audioOffset, audioLength) : Array.Empty<byte>();
+            var cover = hasCover ? ReadBlock(reader, coverOffset, coverLength) : Array.Empty<byte>();
+            reader.BaseStream.Position = (long)markersOffset;
+            var notes = new List<JObject>();
+            for (var i = 0; i < markerCount; i++)
+            {
+                var time = reader.ReadUInt32();
+                var storage = reader.ReadByte();
+                float x;
+                float y;
+                if (storage == 0)
+                {
+                    x = reader.ReadByte() - 1;
+                    y = -(reader.ReadByte() - 1);
+                }
+                else if (storage == 1)
+                {
+                    x = -(reader.ReadSingle() - 1f);
+                    y = -(reader.ReadSingle() - 1f);
+                }
+                else return null;
+                notes.Add(Note(time, x, y, id));
+            }
+            if (notes.Count != noteCount) return null;
+            var separator = mapName.IndexOf(" - ", StringComparison.Ordinal);
+            var artist = separator > 0 ? mapName.Substring(0, separator) : string.Join(" & ", mappers);
+            var title = separator > 0 ? mapName.Substring(separator + 3) : mapName;
+            return WriteVulnus(id, artist, title, string.Join(" & ", mappers), difficulty, notes, audio, cover);
+        }
 
-        private static string? WriteVulnus(string id, string artist, string title, string mapper, string difficulty, List<JObject> notes, byte[] audio, byte[] cover)
+        private static JObject Note(uint time, float x, float y, string id)
+        {
+            var note = new JObject();
+            note["_time"] = time / 1000f;
+            note["_x"] = x;
+            note["_y"] = y;
+            note["rhythiansMapId"] = id;
+            return note;
+        }
+
+        private static string WriteVulnus(string id, string artist, string title, string mapper, string difficulty, List<JObject> notes, byte[] audio, byte[] cover)
         {
             if (string.IsNullOrWhiteSpace(id) || notes.Count == 0) return null;
             Directory.CreateDirectory(Global.MapPath);
-            var output = Global.MapPath.PlusFile($"rhythians_{Sanitize(id)}.vul");
+            var output = Global.MapPath.PlusFile("rhythians_" + Sanitize(id) + ".vul");
             var temp = output + ".tmp";
             if (File.Exists(temp)) File.Delete(temp);
             using (var stream = File.Create(temp))
@@ -292,7 +328,7 @@ namespace Compatibility.SSP
             return System.Text.Encoding.UTF8.GetString(reader.ReadBytes(length));
         }
 
-        private static string? ReadLine(BinaryReader reader)
+        private static string ReadLine(BinaryReader reader)
         {
             var bytes = new List<byte>();
             while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -304,15 +340,18 @@ namespace Compatibility.SSP
             return System.Text.Encoding.UTF8.GetString(bytes.ToArray());
         }
 
-        private static string DifficultyName(byte value) => value switch
+        private static string DifficultyName(byte value)
         {
-            1 => "Easy",
-            2 => "Medium",
-            3 => "Hard",
-            4 => "Logic",
-            5 => "Tasukete",
-            _ => "Unknown"
-        };
+            switch (value)
+            {
+                case 1: return "Easy";
+                case 2: return "Medium";
+                case 3: return "Hard";
+                case 4: return "Logic";
+                case 5: return "Tasukete";
+                default: return "Unknown";
+            }
+        }
 
         private static string Sanitize(string value)
         {
@@ -322,14 +361,12 @@ namespace Compatibility.SSP
 
         private static void WriteJson(ZipArchive zip, string name, JObject json)
         {
-            using var writer = new StreamWriter(zip.CreateEntry(name).Open(), new System.Text.UTF8Encoding(false));
-            writer.Write(json.ToString(Formatting.None));
+            using (var writer = new StreamWriter(zip.CreateEntry(name).Open(), new System.Text.UTF8Encoding(false))) writer.Write(json.ToString(Formatting.None));
         }
 
         private static void WriteBytes(ZipArchive zip, string name, byte[] data)
         {
-            using var stream = zip.CreateEntry(name).Open();
-            stream.Write(data, 0, data.Length);
+            using (var stream = zip.CreateEntry(name).Open()) stream.Write(data, 0, data.Length);
         }
     }
 }
