@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Global : Node
 {
-	public static string MapPath = OS.GetUserDataDir().PlusFile("maps");
+	public static string MapPath = ProjectSettings.GlobalizePath("res://maps");
 
 	public static Global Instance;
 	public static Discord.DiscordW Discord;
