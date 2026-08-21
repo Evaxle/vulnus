@@ -21,7 +21,13 @@ namespace Compatibility.SSP
                     var version = reader.ReadUInt16();
                     stream.Position = 0;
                     if (version == 1) return ImportV1(reader);
-                    if (version == 2) return ImportV2(reader);
+                    if (version == 2)
+                    {
+                        var full = ImportV2(reader);
+                        if (full != null) return full;
+                        stream.Position = 0;
+                        return ImportV2OptimizedFromStart(reader);
+                    }
                     return null;
                 }
             }
@@ -141,7 +147,7 @@ namespace Compatibility.SSP
             var mapperCount = reader.ReadUInt16();
             var mappers = new List<string>();
             for (var i = 0; i < mapperCount; i++) mappers.Add(ReadString(reader));
-            if (definitionsOffset == 0) return ImportV2Optimized(reader, noteCount, markerCount, difficulty, hasAudio, hasCover, audioOffset, audioLength, coverOffset, coverLength, markersOffset, id, mapName, mappers);
+            if (definitionsOffset == 0) return null;
             reader.BaseStream.Position = (long)definitionsOffset;
             var definitionCount = reader.ReadByte();
             var definitions = new List<List<byte>>();
@@ -197,8 +203,36 @@ namespace Compatibility.SSP
             return WriteVulnus(id, artist, title, string.Join(" & ", mappers), difficulty, notes, audio, cover);
         }
 
-        private static string ImportV2Optimized(BinaryReader reader, uint noteCount, uint markerCount, string difficulty, bool hasAudio, bool hasCover, ulong audioOffset, ulong audioLength, ulong coverOffset, ulong coverLength, ulong markersOffset, string id, string mapName, List<string> mappers)
+        private static string ImportV2OptimizedFromStart(BinaryReader reader)
         {
+            reader.ReadUInt32();
+            reader.ReadUInt16();
+            reader.ReadUInt32();
+            reader.ReadBytes(20);
+            reader.ReadUInt32();
+            var noteCount = reader.ReadUInt32();
+            var markerCount = reader.ReadUInt32();
+            var difficulty = DifficultyName(reader.ReadByte());
+            reader.ReadUInt16();
+            var hasAudio = reader.ReadByte() != 0;
+            var hasCover = reader.ReadByte() != 0;
+            reader.ReadByte();
+            reader.ReadUInt64();
+            reader.ReadUInt64();
+            var audioOffset = reader.ReadUInt64();
+            var audioLength = reader.ReadUInt64();
+            var coverOffset = reader.ReadUInt64();
+            var coverLength = reader.ReadUInt64();
+            reader.ReadUInt64();
+            reader.ReadUInt64();
+            var markersOffset = reader.ReadUInt64();
+            reader.ReadUInt64();
+            var id = ReadString(reader);
+            var mapName = ReadString(reader);
+            ReadString(reader);
+            var mapperCount = reader.ReadUInt16();
+            var mappers = new List<string>();
+            for (var i = 0; i < mapperCount; i++) mappers.Add(ReadString(reader));
             var audio = hasAudio ? ReadBlock(reader, audioOffset, audioLength) : Array.Empty<byte>();
             var cover = hasCover ? ReadBlock(reader, coverOffset, coverLength) : Array.Empty<byte>();
             reader.BaseStream.Position = (long)markersOffset;
