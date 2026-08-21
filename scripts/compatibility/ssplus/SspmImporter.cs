@@ -36,8 +36,7 @@ namespace Compatibility.SSP
         public static void ImportDirectory(string directory)
         {
             if (!Directory.Exists(directory)) return;
-            foreach (var path in Directory.GetFiles(directory, "*.sspm", SearchOption.TopDirectoryOnly))
-                Import(path);
+            foreach (var path in Directory.GetFiles(directory, "*.sspm", SearchOption.TopDirectoryOnly)) Import(path);
         }
 
         public static string? ReadMapId(string path)
@@ -137,11 +136,10 @@ namespace Compatibility.SSP
             reader.ReadUInt64();
             var id = ReadString(reader);
             var mapName = ReadString(reader);
-            reader.ReadString();
+            ReadString(reader);
             var mapperCount = reader.ReadUInt16();
             var mappers = new List<string>();
             for (var i = 0; i < mapperCount; i++) mappers.Add(ReadString(reader));
-
             reader.BaseStream.Position = (long)definitionsOffset;
             var definitionCount = reader.ReadByte();
             var definitions = new List<List<byte>>();
@@ -157,7 +155,6 @@ namespace Compatibility.SSP
                 if (name == "ssp_note") noteDefinition = i;
             }
             if (noteDefinition < 0) return null;
-
             var audio = hasAudio ? ReadBlock(reader, audioOffset, audioLength) : Array.Empty<byte>();
             var cover = hasCover ? ReadBlock(reader, coverOffset, coverLength) : Array.Empty<byte>();
             reader.BaseStream.Position = (long)markersOffset;
